@@ -15,6 +15,7 @@ model User {
   Subscription        Subscription?
   subscriptionId      Int
   Board               Board[]
+  Feed                Feed[]
 }
 
 model UserPostInteraction {
@@ -42,6 +43,8 @@ model Feed {
   id        Int      @id @default(autoincrement())
   Source    Source[]
   originUrl String
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 model Source {
