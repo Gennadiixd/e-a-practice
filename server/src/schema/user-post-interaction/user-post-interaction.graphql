@@ -1,0 +1,9 @@
+type UserPostInteraction {
+  id: ID!
+  User: User!
+  Post: Post!
+  isPostHidden: Boolean!
+  isPostPostponed: Boolean!
+  isPostRead: Boolean!
+  originUrl: String!
+}

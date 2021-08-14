@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id                  String                @id @default(cuid())
+  email               String                @unique
+  password            String
+  UserPostInteraction UserPostInteraction[]
+  Subscription        Subscription?
+  subscriptionId      Int
+  Board               Board[]
+}
+
+model UserPostInteraction {
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  Post            Post?    @relation(fields: [postId], references: [id])
+  postId          Int?
+  isPostHidden    Boolean
+  isPostPostponed Boolean
+  isPostRead      Boolean
+  User            User     @relation(fields: [userId], references: [id])
+  userId          String
+}
+
+model Post {
+  id                  Int                   @id @default(autoincrement())
+  Board               Board?                @relation(fields: [boardId], references: [id])
+  boardId             Int
+  UserPostInteraction UserPostInteraction[]
+  originUrl           String
+}
+
+model Feed {
+  id        Int      @id @default(autoincrement())
+  Source    Source[]
+  originUrl String
+}
+
+model Source {
+  id     Int    @id @default(autoincrement())
+  Feed   Feed[] @relation(fields: [feedId], references: [id])
+  feedId Int
+}
+
+model Subscription {
+  id     Int     @id @default(autoincrement())
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+}
+
+model Board {
+  id     Int    @id @default(autoincrement())
+  Post   Post[]
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+}
