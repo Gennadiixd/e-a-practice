@@ -6,7 +6,11 @@ export const Query: QueryResolvers<{ prisma: PrismaClient }> = {
     return ctx.prisma.user.findUnique({
       where: { id: args.userId },
       include: {
-        boards: true,
+        boards: {
+          include: {
+            posts: true,
+          },
+        },
         authorSubscriptionList: true,
       },
     });
