@@ -25,7 +25,7 @@ export const QUERY = gql`
 `;
 
 const Users = () => {
-  const queryString = require("query-string");
+  const queryString = require("query_old-string");
   const context = React.useContext(PostsContext);
   const location = useLocation();
   const parsed = queryString.parse(location.search);

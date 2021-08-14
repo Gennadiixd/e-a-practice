@@ -8,7 +8,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 const Search = () => {
   const history = useHistory();
   const location = useLocation();
-  const queryString = require("query-string");
+  const queryString = require("query_old-string");
   const parsed = queryString.parse(location.search);
 
   const [search, setSearch] = useState(parsed.search ? parsed.search : "");
