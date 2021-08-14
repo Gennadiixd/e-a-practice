@@ -11,6 +11,11 @@ export const Query: QueryResolvers<{ prisma: PrismaClient }> = {
             posts: true,
           },
         },
+        feeds: {
+          include: {
+            authors:true
+          }
+        },
         authorSubscriptionList: true,
       },
     });

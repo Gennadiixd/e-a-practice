@@ -7,6 +7,7 @@ type User {
     email: String
     boards: [Board]
     subscriptions: [Author]
+    feeds: [Feed]
 }
 
 # Entity that user can subscribe on. Creates content.

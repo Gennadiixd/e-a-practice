@@ -13,7 +13,7 @@ const useUserFeeds = () => {
   });
 
   return {
-    feeds: data?.user?.Feeds || [],
+    feeds: data?.user?.feeds || [],
   };
 };
 

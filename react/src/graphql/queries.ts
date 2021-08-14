@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const UserPostInteractionQUERY = gql`
-  query User($id: ID!) {
+  query user($id: ID!) {
     user(id: $id) {
       UserPostInteraction {
         id
@@ -17,31 +17,26 @@ export const UserPostInteractionQUERY = gql`
 `;
 
 export const UserTodayQUERY = gql`
-  query User($id: ID!) {
+  query user($id: ID!) {
     user(id: $id) {
       Today {
         id
-        isPostHidden
-        isPostPostponed
-        isPostRead
-        Post {
-          id
-        }
+        Posts
       }
     }
   }
 `;
 
 export const UserFeedsQUERY = gql`
-  query User($id: ID!) {
-    user(id: $id) {
-      Feeds {
+  query user($id: ID!) {
+    user(userId: $id) {
+      feeds {
         id
-        isPostHidden
-        isPostPostponed
-        isPostRead
-        Post {
+        title
+        authors {
           id
+          title
+          description
         }
       }
     }
@@ -49,15 +44,16 @@ export const UserFeedsQUERY = gql`
 `;
 
 export const UserBoardsQUERY = gql`
-  query User($id: ID!) {
-    user(id: $id) {
-      Boards {
+  query user($id: ID!) {
+    user(userId: $id) {
+      boards {
         id
-        isPostHidden
-        isPostPostponed
-        isPostRead
-        Post {
+        title
+        description
+        posts {
           id
+          title
+          textContent
         }
       }
     }

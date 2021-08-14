@@ -13,7 +13,7 @@ const useUserBoard = () => {
   });
 
   return {
-    boards: data?.user?.Boards || [],
+    boards: data?.user?.boards || [],
   };
 };
 

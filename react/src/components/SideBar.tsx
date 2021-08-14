@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SideBar({ contentSlot, onChangeTab, currentTabName }: any) {
-  // const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -129,7 +128,16 @@ function SideBar({ contentSlot, onChangeTab, currentTabName }: any) {
           </Drawer>
         </Hidden>
       </nav>
-      {contentSlot}
+      <div
+        style={{
+          marginTop: "90px",
+          flexDirection: "column",
+          display: "flex",
+          width: "100%",
+        }}
+      >
+        {contentSlot}
+      </div>
     </div>
   );
 }

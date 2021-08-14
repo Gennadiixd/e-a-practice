@@ -4,7 +4,11 @@
     "start-watch": "ts-node-dev --no-notify --respawn --transpile-only src/server",
     "start": "ts-node src/server.ts",
     "codegen:run": "graphql-codegen --config codegen.yml",
-    "lint": "eslint --fix ./src/*/*.ts"
+    "lint": "eslint --fix ./src/*/*.ts",
+    "typegen": "yarn graphql-codegen",
+    "migrate": "npx prisma migrate dev",
+    "studio": "npx prisma studio",
+    "seed": "ts-node prisma/seed"
   },
   "dependencies": {
     "@prisma/client": "^2.28.0",
