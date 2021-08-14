@@ -1,0 +1,8 @@
+type Query {
+    user(userId: ID!): User
+    me: User!
+    board(boardId: ID!): Board
+    post(postId: ID!): Post
+    author(authorId: ID!): Author
+    posts(boardId: ID!): [Post!]
+}

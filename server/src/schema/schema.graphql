@@ -1,7 +1,0 @@
-type Query {
-  user(id: ID!): User!
-}
-
-type Mutation {
-  loginUser(email: String!, password: String!): User!
-}

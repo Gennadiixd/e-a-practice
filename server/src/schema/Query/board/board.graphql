@@ -1,0 +1,7 @@
+type Board {
+    id: ID
+    title: String
+    description: String
+    posts: [Post]
+    owner: User
+}

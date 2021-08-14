@@ -3,65 +3,122 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgres"
+  url      = env("DATABASE_URL")
 }
 
+// hub for all user-related stuff
 model User {
-  id                  String                @id @default(cuid())
-  email               String                @unique
-  password            String
-  UserPostInteraction UserPostInteraction[]
-  Subscription        Subscription?
-  subscriptionId      Int
-  Board               Board[]
-  Feed                Feed[]
+  id                     String       @id @default(cuid())
+  posts                  UsersPosts[]
+  boards                 Board[]
+  // list of authors user is subscribed to
+  authorSubscriptionList Author[]
+  feeds                  UserFeed[]
+  theme                  Theme        @default(LIGHT)
+  firstName              String
+  lastName               String
+  email                  String       @db.VarChar(254)
+  // hashed
+  password               String
 }
 
-model UserPostInteraction {
-  id              Int      @id @default(autoincrement())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  Post            Post?    @relation(fields: [postId], references: [id])
-  postId          Int?
-  isPostHidden    Boolean
-  isPostPostponed Boolean
-  isPostRead      Boolean
-  User            User     @relation(fields: [userId], references: [id])
-  userId          String
+enum Theme {
+  DARK
+  LIGHT
 }
 
 model Post {
-  id                  Int                   @id @default(autoincrement())
-  Board               Board?                @relation(fields: [boardId], references: [id])
-  boardId             Int
-  UserPostInteraction UserPostInteraction[]
-  originUrl           String
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  textContent String?
+  title       String
+  coverImgUrl String?
+
+  // original url to let user go to the original author
+  url String
+
+  // entity that released the post
+  author   Author @relation(fields: [authorId], references: [id])
+  authorId String
+
+  // post can be promoted – one of the premium options
+  isSponsored Boolean?
+
+  // person who has written the article
+  // this info is gotten from API of the author dynamically, list of writers is not kept in db
+  writer String?
+
+  // has explicit m-n relations with User in order to make users be able to hide post, mark it as read etc
+  users UsersPosts[]
+
+  // implicit m-n with Board – post can be in many boards and a board can have many posts
+  boards Board[]
 }
 
-model Feed {
-  id        Int      @id @default(autoincrement())
-  Source    Source[]
-  originUrl String
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+// m-n relation of posts and users
+model UsersPosts {
+  userId      String
+  user        User    @relation(fields: [userId], references: [id])
+  postId      String
+  post        Post    @relation(fields: [postId], references: [id])
+  isHidden    Boolean @default(false)
+  isRead      Boolean @default(false)
+  isPostponed Boolean @default(false)
+
+  @@unique([userId, postId])
 }
 
-model Source {
-  id     Int    @id @default(autoincrement())
-  Feed   Feed[] @relation(fields: [feedId], references: [id])
-  feedId Int
-}
-
-model Subscription {
-  id     Int     @id @default(autoincrement())
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
-}
-
+// place where user can save posts
 model Board {
-  id     Int    @id @default(autoincrement())
-  Post   Post[]
-  User   User   @relation(fields: [userId], references: [id])
-  userId String
+  owner       User    @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  title       String
+  id          String  @id @default(cuid())
+  description String
+  posts       Post[]
+  isPublic    Boolean @default(false)
+}
+
+// entities those create posts, can be followed by users
+// generally non-human entity (at least not considered
+// a person itself) – journals, blogs, etc.
+model Author {
+  id          String @id @default(cuid())
+  posts       Post[]
+  title       String
+  description String
+
+  // url to the author website, blog, etc.
+  hostUrl String
+
+  // implicit m-n with User – user can have many subscriptions and an author can have many followers
+  followers User[]
+
+  // implicit m-n with Feed – authors can be added to many feeds and vice versa
+  feeds UserFeed[]
+
+  // implicit m-n relation with AuthorBundle – author can be in many bundles and a bundle can have many authors include
+  authorBundles AuthorBundle[]
+}
+
+// user can group followed authors – this group is called feed (like in facebook, instagram, etc.)
+// it helps to divide information streams into logically separated flows
+// e.g. feed "Finance" consisted of some chosen authors like Forbes, Freakonomics, etc.
+// (title and authors user choose him/herself)
+model UserFeed {
+  id      String   @id @default(cuid())
+  title   String
+  authors Author[]
+  User    User     @relation(fields: [ownerId], references: [id])
+  ownerId String
+}
+
+// bunch of authors grouped by theme/category
+model AuthorBundle {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  authors     Author[]
 }

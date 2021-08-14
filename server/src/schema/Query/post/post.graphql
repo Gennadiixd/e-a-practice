@@ -1,0 +1,15 @@
+scalar DateTime
+
+# Kind of article. Created by Authors.
+# Can be collected by Users and added to their Boards;
+type Post {
+  id: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  title: String
+  coverImgUrl: String
+  textContent: String
+  originalUrl: String
+  author: Author
+  isSponsored: Boolean
+}
