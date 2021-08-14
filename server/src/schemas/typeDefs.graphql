@@ -1,0 +1,62 @@
+scalar DateTime
+
+type User {
+    firstName: String
+    lastName: String
+    id: ID
+    email: String
+    boards: [Board]
+    subscriptions: [Author]
+}
+
+# Entity that user can subscribe on. Creates content.
+# Consider it as like journal, blog, not a living person.
+type Author {
+    id: ID
+    title: String
+    posts: [Post]
+    hostUrl: String
+    followers: [User]
+    description: String
+}
+
+# Kind of article. Created by Authors.
+# Can be collected by Users and added to their Boards;
+type Post {
+    id: ID
+    createdAt: DateTime
+    updatedAt: DateTime
+    title: String
+    coverImgUrl: String
+    textContent: String
+    originalUrl: String
+    author: Author
+    isSponsored: Boolean
+}
+
+# Place where Users store Posts they've liked.
+type Board {
+    id: ID
+    title: String
+    description: String
+    posts: [Post]
+    owner: User
+}
+
+# Kind of stream of Posts of chosen Authors, created by a User for private use.
+# User can pick Authors and group them into a Feed. Posts by these Authors will appear in this Feed.
+type Feed {
+    id: ID
+    title: String
+    authors: [Author]
+    owner: User
+}
+
+type Query {
+    user(userId: ID!): User
+    me: User!
+    board(boardId: ID!): Board
+    post(postId: ID!): Post
+    author(authorId: ID!): Author
+    posts(cursor: DateTime!, boardId: ID!): [Post!]
+}

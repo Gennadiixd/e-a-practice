@@ -1,13 +1,22 @@
-import { ApolloServer } from 'apollo-server'
-import { config } from 'dotenv'
+import { ApolloServer } from 'apollo-server';
+import { makeExecutableSchema } from 'graphql-tools';
+import { readFileSync } from 'fs';
+import * as path from 'path';
+import { resolvers } from './resolvers';
+import { createContext } from './context';
 
-import { createContext } from './context'
-import schema from './schema'
+const typeDefs = readFileSync(
+  path.resolve(__dirname, 'schemas', 'typeDefs.graphql'),
+  'utf-8',
+);
 
-config()
-const { SERVER_PORT } = process.env
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
 
-new ApolloServer({ schema, context: createContext }).listen(
-  { port: SERVER_PORT },
-  () => console.log(`🚀 Server ready at: http://localhost:${SERVER_PORT}`),
-)
+new ApolloServer({ schema, context: createContext })
+  .listen({ port: 5000 })
+  .then(() =>
+    console.log('🚀 Server ready at: http://localhost:5000 ⭐️⭐️⭐️⭐️'),
+  );

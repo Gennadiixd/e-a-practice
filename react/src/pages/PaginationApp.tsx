@@ -8,7 +8,7 @@ interface Props {
 }
 
 const PaginationApp = (props: Props) => {
-  const queryString = require("query-string");
+  const queryString = require("query_old-string");
 
   const location = useLocation();
   const parsed = queryString.parse(location.search);
