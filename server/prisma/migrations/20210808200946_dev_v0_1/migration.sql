@@ -16,7 +16,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Post" (
     "id" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "textContent" TEXT,
     "title" TEXT NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE "UsersPosts" (
 
 -- CreateTable
 CREATE TABLE "Board" (
-    "ownerId" TEXT NOT NULL,
+    "authorId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "id" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -52,7 +52,6 @@ CREATE TABLE "Board" (
 -- CreateTable
 CREATE TABLE "Author" (
     "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "hostUrl" TEXT NOT NULL,
 
@@ -138,7 +137,7 @@ ALTER TABLE "UsersPosts" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON D
 ALTER TABLE "UsersPosts" ADD FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Board" ADD FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Board" ADD FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserFeed" ADD FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

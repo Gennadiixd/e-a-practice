@@ -1,8 +1,0 @@
-type User {
-  firstName: String
-  lastName: String
-  id: ID
-  email: String
-  boards: [Board]
-  subscriptions: [Author]
-}
