@@ -1,20 +1,15 @@
-import { useQuery } from "@apollo/client";
-
-import { UserFeedsQUERY } from "../graphql/queries";
+import useFeedsStorage from "../services/FeedsStorageAdaptor";
 import useUser from "./use-user";
 
 const useUserFeeds = () => {
   const { id } = useUser();
+  const { getUserFeeds, userFeeds } = useFeedsStorage();
 
-  const { data } = useQuery(UserFeedsQUERY, {
-    variables: {
-      id,
-    },
-  });
-
-  return {
-    feeds: data?.user?.feeds || [],
+  const handleGetUserFeeds = () => {
+    getUserFeeds(id);
   };
+
+  return { feeds: userFeeds, getUserFeeds: handleGetUserFeeds };
 };
 
 export default useUserFeeds;

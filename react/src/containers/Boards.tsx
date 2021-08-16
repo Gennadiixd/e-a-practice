@@ -6,11 +6,11 @@ const Boards: FC = () => {
   const { boards } = useUserBoards();
 
   return (
-    <>
+    <main>
       {boards.map((board: any) => (
         <Board board={board} key={board.id} />
       ))}
-    </>
+    </main>
   );
 };
 

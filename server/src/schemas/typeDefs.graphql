@@ -33,6 +33,7 @@ type Post {
     originalUrl: String
     author: Author
     isSponsored: Boolean
+    url: String
 }
 
 # Place where Users store Posts they've liked.
@@ -60,4 +61,11 @@ type Query {
     post(postId: ID!): Post
     author(authorId: ID!): Author
     posts(cursor: DateTime!, boardId: ID!): [Post!]
+    allPosts: [Post!]
+}
+
+type Mutation {
+    createPost(authorId: ID!, title: String, textContent: String, url: String): Post
+    updatePost(id: ID!, title: String, textContent: String, url: String): Post
+    deletePost(id: ID!): Post
 }

@@ -1,0 +1,13 @@
+query UserFeeds($id: ID!) {
+  user(userId: $id) {
+    feeds {
+      id
+      title
+      authors {
+        id
+        title
+        description
+      }
+    }
+  }
+}

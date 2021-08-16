@@ -47,4 +47,8 @@ export const Query: QueryResolvers<{ prisma: PrismaClient }> = {
       })
       .posts();
   },
+
+  allPosts(parent, args, ctx){
+    return ctx.prisma.post.findMany()
+  }
 };

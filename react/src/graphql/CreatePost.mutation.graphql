@@ -1,0 +1,18 @@
+mutation CreatePostMutation(
+  $authorId: ID!
+  $title: String
+  $textContent: String
+  $url: String
+) {
+  createPost(
+    authorId: $authorId
+    title: $title
+    textContent: $textContent
+    url: $url
+  ) {
+    title
+    id
+    textContent
+    url
+  }
+}

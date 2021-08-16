@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import Typography from "@material-ui/core/Typography";
+import React, { FC, useState, useCallback, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
-import useUserToday from "../application/use-user-today";
+import Post from "../components/Post";
+import usePostsStorage from "../services/PostsStorageAdaptor";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,26 +17,46 @@ const useStyles = makeStyles((theme) => ({
 
 const Today: FC = () => {
   const classes = useStyles();
+  const { getAllPosts, createPost, updatePost, deletePost } = usePostsStorage();
+  const [allPosts, setAllPosts] = useState([]);
 
-  const { today } = useUserToday();
-  console.log(today);
+  const handleGetAllPosts = useCallback(() => {
+    getAllPosts().then(({ allPosts }) => setAllPosts(allPosts));
+  }, []);
+
+  useEffect(handleGetAllPosts, []);
+
+  const handleCreatePost = async () => {
+    await createPost({
+      authorId: "cksc2v80900075tvimijqbiua",
+      title: "Best post in the word",
+      textContent: "The best content of post, lorem ipsum...",
+      url: "www.com",
+    });
+    handleGetAllPosts();
+  };
+
+  const handleEditPost = async ({ id, textContent, title, url }: any) => {
+    await updatePost({ id, textContent, title, url });
+    handleGetAllPosts();
+  };
+
+  const handleDeletePost = async (id: any) => {
+    await deletePost(id);
+    handleGetAllPosts();
+  };
 
   return (
     <main className={classes.content}>
-      <Typography paragraph>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus
-        non enim praesent elementum facilisis leo vel. Risus at ultrices mi
-        tempus imperdiet. Semper risus in hendrerit gravida rutrum quisque non
-        tellus. Convallis convallis tellus id interdum velit laoreet id donec
-        ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl
-        suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod
-        quis viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet
-        proin fermentum leo. Mauris commodo quis imperdiet massa tincidunt. Cras
-        tincidunt lobortis feugiat vivamus at augue. At augue eget arcu dictum
-        varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt.
-        Lorem donec massa sapien faucibus et molestie ac.
-      </Typography>
+      <button onClick={handleCreatePost}>Create post</button>
+      {allPosts.map((post: any) => (
+        <Post
+          post={post}
+          key={post.id}
+          onEditPost={handleEditPost}
+          onDeletePost={handleDeletePost}
+        />
+      ))}
     </main>
   );
 };

@@ -13,7 +13,7 @@ const useUserToday = () => {
   });
 
   return {
-    today: data?.user?.Today || [],
+    today: data?.user?.today || [],
   };
 };
 

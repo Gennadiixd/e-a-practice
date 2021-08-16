@@ -1,0 +1,12 @@
+mutation UpdatePostMutation(
+  $id: ID!
+  $title: String
+  $textContent: String
+) {
+  updatePost(id: $id, title: $title, textContent: $textContent) {
+    title
+    id
+    textContent
+    url
+  }
+}
